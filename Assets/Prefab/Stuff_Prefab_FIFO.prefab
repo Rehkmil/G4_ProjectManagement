@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 735481045095771058}
   - component: {fileID: -6057400814432662167}
   m_Layer: 0
-  m_Name: Stuff_Prefab
+  m_Name: Stuff_Prefab_FIFO
   m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -179,4 +179,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea9956015a7e57c4fbd67cf1858c444a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ConveyorItem
-  speed: 1.2
+  speed: 1.5

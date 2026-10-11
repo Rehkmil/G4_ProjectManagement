@@ -1,45 +1,57 @@
 using UnityEngine;
-using System.Collections.Generic; // Required for Lists
+using System.Collections.Generic;
 using TMPro;
 
 public class ConveyorSpawner : MonoBehaviour
 {
     [Header("Spawner Settings")]
-    public List<GameObject> itemPrefabs; // Add as many different prefabs as you want in the Inspector
-    public float spawnInterval = 3f; 
+    public List<GameObject> itemPrefabs;
+    
+    [Header("Normal Mode")]
+    public float normalSpawnInterval = 3f;
 
+    [Header("Challenge Mode Limits")]
+    public float challengeStartInterval = 3f; 
+    public float challengeMinInterval = 1f;   
+
+    private float currentInterval;
     private float timer;
-    private int itemNumber = 1; 
+    private int itemNumber = 1;
+
+    private void Start()
+    {
+        currentInterval = GameManager.isChallengeMode ? challengeStartInterval : normalSpawnInterval;
+    }
 
     private void Update()
     {
         if (!GameManager.instance.isGameActive) return;
 
+        if (GameManager.isChallengeMode)
+        {
+            float timePercent = GameManager.instance.GetTimePercentage();
+            currentInterval = Mathf.Lerp(challengeMinInterval, challengeStartInterval, timePercent);
+        }
+
         timer += Time.deltaTime;
 
-        if (timer >= spawnInterval)
+        if (timer >= currentInterval)
         {
             SpawnBox();
-            timer = 0f; 
+            timer = 0f;
         }
     }
 
     private void SpawnBox()
     {
-        // Safety check: Don't try to spawn if the list is empty
         if (itemPrefabs.Count == 0) return;
 
-        // 1. Pick a random prefab from the list
         int randomIndex = Random.Range(0, itemPrefabs.Count);
         GameObject selectedPrefab = itemPrefabs[randomIndex];
-
-        // 2. Spawn the chosen prefab
         GameObject newBox = Instantiate(selectedPrefab, transform.position, Quaternion.identity);
 
-        // 3. Register it with the GameManager
         GameManager.instance.RegisterItem(newBox);
 
-        // 4. Update the text label
         TextMeshProUGUI boxLabel = newBox.GetComponentInChildren<TextMeshProUGUI>();
         if (boxLabel != null)
         {

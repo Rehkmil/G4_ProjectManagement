@@ -17,7 +17,8 @@ public class ClawController : MonoBehaviour
 
     private void Update()
     {
-        // 1. Calculate intended movement
+        if (!GameManager.instance.isGameActive) return;
+
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveY = Input.GetAxisRaw("Vertical");
         
@@ -53,6 +54,8 @@ public class ClawController : MonoBehaviour
         {
             conveyorMovement.enabled = false;
         }
+
+        GameManager.instance.ProcessGrab(heldItem);
 
         heldItem.transform.position = holdAnchor.position;
         heldItem.transform.SetParent(holdAnchor);
