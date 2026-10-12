@@ -100,7 +100,7 @@ public class GameManager : MonoBehaviour
         {
             int minutes = Mathf.FloorToInt(timeRemaining / 60);
             int seconds = Mathf.FloorToInt(timeRemaining % 60);
-            timerText.text = string.Format("Time: {0:00}:{1:00}", minutes, seconds);
+            timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
         }
     }
 
@@ -149,7 +149,7 @@ public class GameManager : MonoBehaviour
     {
         if (!isGameActive) return;
         score += amount;
-        if (scoreText != null) scoreText.text = "Score: " + score;
+        if (scoreText != null) scoreText.text = "" + score;
     }
 
     public void TriggerGameOver(string reason)
