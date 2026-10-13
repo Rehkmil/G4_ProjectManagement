@@ -6,6 +6,8 @@ public class ClawCraneController : MonoBehaviour
     public Transform clawTransform;
     public Transform holdAnchor;
 
+    public Animator animator;
+
     [Header("Speeds")]
     public float horizontalClawSpeed = 5f;
     public float verticalRailSpeed = 4f;
@@ -57,12 +59,19 @@ public class ClawCraneController : MonoBehaviour
         {
             if (!isCarrying)
             {
+
                 AttemptGrab();
+                
             }
             else
             {
+
                 DropItem();
+
+
+                animator.ResetTrigger("Grabbed");
             }
+
         }
     }
 
@@ -76,6 +85,8 @@ public class ClawCraneController : MonoBehaviour
             {
                 heldItem = hit.gameObject;
                 isCarrying = true;
+                animator.SetTrigger("Grabbed");
+                animator.SetBool("IsGrabbing", true);
 
                 ConveyorItem conveyorMovement = heldItem.GetComponent<ConveyorItem>();
                 if (conveyorMovement != null) conveyorMovement.enabled = false;
@@ -98,6 +109,8 @@ public class ClawCraneController : MonoBehaviour
             heldItem = null;
         }
         isCarrying = false;
+        animator.ResetTrigger("Grabbed");
+        animator.SetBool("IsGrabbing", false);
     }
 
     private void OnDrawGizmosSelected()
