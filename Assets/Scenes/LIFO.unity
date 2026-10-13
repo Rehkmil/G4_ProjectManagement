@@ -459,7 +459,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &326508726
 Transform:
   m_ObjectHideFlags: 0
@@ -1378,9 +1378,74 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ConveyorSpawner
   itemPrefabs:
   - {fileID: 1768420864342663715, guid: 2b62ce480927f6f43bb3e47df5f2f3aa, type: 3}
-  normalSpawnInterval: 3
+  normalSpawnInterval: 3.5
   challengeStartInterval: 3
   challengeMinInterval: 1.5
+--- !u!1001 &594687404
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2452809495237003440, guid: 710dd284af1f03544b177824d4d354ed, type: 3}
+      propertyPath: m_Name
+      value: ClawCraneMachine
+      objectReference: {fileID: 0}
+    - target: {fileID: 5837512253227768443, guid: 710dd284af1f03544b177824d4d354ed, type: 3}
+      propertyPath: maxY
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 5837512253227768443, guid: 710dd284af1f03544b177824d4d354ed, type: 3}
+      propertyPath: minX
+      value: -8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7642798488868647550, guid: 710dd284af1f03544b177824d4d354ed, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 4.73
+      objectReference: {fileID: 0}
+    - target: {fileID: 7642798488868647550, guid: 710dd284af1f03544b177824d4d354ed, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.65
+      objectReference: {fileID: 0}
+    - target: {fileID: 7642798488868647550, guid: 710dd284af1f03544b177824d4d354ed, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7642798488868647550, guid: 710dd284af1f03544b177824d4d354ed, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7642798488868647550, guid: 710dd284af1f03544b177824d4d354ed, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7642798488868647550, guid: 710dd284af1f03544b177824d4d354ed, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7642798488868647550, guid: 710dd284af1f03544b177824d4d354ed, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7642798488868647550, guid: 710dd284af1f03544b177824d4d354ed, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7642798488868647550, guid: 710dd284af1f03544b177824d4d354ed, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7642798488868647550, guid: 710dd284af1f03544b177824d4d354ed, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 710dd284af1f03544b177824d4d354ed, type: 3}
 --- !u!1 &700077182
 GameObject:
   m_ObjectHideFlags: 0
@@ -3239,7 +3304,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ConveyorSpawner
   itemPrefabs:
   - {fileID: 1768420864342663715, guid: 2b62ce480927f6f43bb3e47df5f2f3aa, type: 3}
-  normalSpawnInterval: 4
+  normalSpawnInterval: 6.5
   challengeStartInterval: 3
   challengeMinInterval: 2
 --- !u!1 &1866718310
@@ -3384,6 +3449,7 @@ SceneRoots:
   - {fileID: 832575519}
   - {fileID: 208759536}
   - {fileID: 326508726}
+  - {fileID: 594687404}
   - {fileID: 1664786890}
   - {fileID: 333051001}
   - {fileID: 169758730}
