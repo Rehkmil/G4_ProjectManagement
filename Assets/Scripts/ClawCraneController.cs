@@ -8,6 +8,9 @@ public class ClawCraneController : MonoBehaviour
 
     public Animator animator;
 
+    [Header("Audio")]
+    public AudioSource moveSound;
+
     [Header("Speeds")]
     public float horizontalClawSpeed = 5f;
     public float verticalRailSpeed = 4f;
@@ -25,7 +28,11 @@ public class ClawCraneController : MonoBehaviour
 
     private void Update()
     {
-        if (!GameManager.instance.isGameActive) return;
+        if (!GameManager.instance.isGameActive)
+        {
+            StopMoveSound();
+            return;
+        }
 
         HandleMovement();
         HandleGrab();
@@ -33,11 +40,17 @@ public class ClawCraneController : MonoBehaviour
 
     private void HandleMovement()
     {
+        bool isMoving = false;
+
         float moveY = Input.GetAxisRaw("Vertical");
         if (moveY != 0)
         {
             Vector3 newRailPos = transform.position + Vector3.up * moveY * verticalRailSpeed * Time.deltaTime;
             newRailPos.y = Mathf.Clamp(newRailPos.y, minY, maxY);
+
+            if (!Mathf.Approximately(newRailPos.y, transform.position.y))
+                isMoving = true;
+
             transform.position = newRailPos;
         }
 
@@ -48,9 +61,28 @@ public class ClawCraneController : MonoBehaviour
             {
                 Vector3 newClawPos = clawTransform.position + Vector3.right * moveX * horizontalClawSpeed * Time.deltaTime;
                 newClawPos.x = Mathf.Clamp(newClawPos.x, minX, maxX);
+
+                if (!Mathf.Approximately(newClawPos.x, clawTransform.position.x))
+                    isMoving = true;
+
                 clawTransform.position = newClawPos;
             }
         }
+
+        if (isMoving) PlayMoveSound();
+        else StopMoveSound();
+    }
+
+    private void PlayMoveSound()
+    {
+        if (moveSound != null && !moveSound.isPlaying)
+            moveSound.Play();
+    }
+
+    private void StopMoveSound()
+    {
+        if (moveSound != null && moveSound.isPlaying)
+            moveSound.Stop();
     }
 
     private void HandleGrab()
@@ -59,19 +91,13 @@ public class ClawCraneController : MonoBehaviour
         {
             if (!isCarrying)
             {
-
                 AttemptGrab();
-                
             }
             else
             {
-
                 DropItem();
-
-
                 animator.ResetTrigger("Grabbed");
             }
-
         }
     }
 
