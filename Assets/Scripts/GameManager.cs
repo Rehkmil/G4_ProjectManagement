@@ -1,38 +1,48 @@
 using UnityEngine;
 using System.Collections.Generic;
-using TMPro; 
+using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEngine.Audio;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-    public static bool isChallengeMode = false; 
+    public static bool isChallengeMode = false;
 
     [Header("Level Settings")]
-    public bool isFIFOLevel = true; 
-    public float levelDuration = 60f; 
+    public bool isFIFOLevel = true;
+    public float levelDuration = 60f;
     private float timeRemaining;
     public bool isGameActive = true;
 
     [Header("Gameplay UI")]
     public TextMeshProUGUI scoreText;
-    public TextMeshProUGUI timerText; 
+    public TextMeshProUGUI timerText;
     public int score = 0;
 
     [Header("End Game UI")]
-    public GameObject endPanel; 
-    public TextMeshProUGUI finalScoreText; 
-    public GameObject challengeButton; 
+    public GameObject endPanel;
+    public TextMeshProUGUI finalScoreText;
+    public GameObject challengeButton;
+    public GameObject nextLevelButton;
+
+    [Header("Win Sound")]
+    public AudioClip winSound;
+    [Range(0f, 1f)]
+    public float winSoundVolume = 1f;
+    public AudioMixerGroup sfxGroup;
+
+    private AudioSource audioSource;
 
     public List<GameObject> activeItems = new List<GameObject>();
     public List<GameObject> correctlyGrabbedItems = new List<GameObject>();
 
     [Header("Prep Timer")]
-    public float prepDuration = 3f; 
+    public float prepDuration = 3f;
     private float prepTimer;
     public TextMeshProUGUI centerCountdownText;
 
-    public float GetTimePercentage() 
+    public float GetTimePercentage()
     {
         return timeRemaining / levelDuration;
     }
@@ -41,6 +51,21 @@ public class GameManager : MonoBehaviour
     {
         if (instance == null) instance = this;
         else Destroy(gameObject);
+
+        audioSource = GetComponent<AudioSource>();
+
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+
+        audioSource.playOnAwake = false;
+        audioSource.spatialBlend = 0f;
+
+        if (sfxGroup != null)
+        {
+            audioSource.outputAudioMixerGroup = sfxGroup;
+        }
     }
 
     private void Start()
@@ -48,10 +73,10 @@ public class GameManager : MonoBehaviour
         timeRemaining = levelDuration;
         UpdateTimerUI();
 
-        isGameActive = false; 
+        isGameActive = false;
         prepTimer = prepDuration;
-        
-        if (centerCountdownText != null) 
+
+        if (centerCountdownText != null)
         {
             centerCountdownText.gameObject.SetActive(true);
         }
@@ -63,7 +88,7 @@ public class GameManager : MonoBehaviour
         if (prepTimer > 0)
         {
             prepTimer -= Time.deltaTime;
-            
+
             if (centerCountdownText != null)
             {
                 centerCountdownText.text = Mathf.CeilToInt(prepTimer).ToString();
@@ -75,10 +100,10 @@ public class GameManager : MonoBehaviour
                 if (centerCountdownText != null)
                 {
                     centerCountdownText.text = "GO!";
-                    Destroy(centerCountdownText.gameObject, 1f); 
+                    Destroy(centerCountdownText.gameObject, 1f);
                 }
             }
-            return; 
+            return;
         }
 
         if (isGameActive && timeRemaining > 0)
@@ -155,39 +180,70 @@ public class GameManager : MonoBehaviour
     public void TriggerGameOver(string reason)
     {
         isGameActive = false;
-        Time.timeScale = 0f; 
+        Time.timeScale = 0f;
+
+        bool didWin = (reason == "Time's Up!");
+
+        // Play winning sound when the timer ends
+        if (didWin && winSound != null)
+        {
+            audioSource.PlayOneShot(winSound, winSoundVolume);
+        }
 
         if (endPanel != null)
         {
             endPanel.SetActive(true);
 
             finalScoreText.text = reason + "\nFinal Score: " + score;
-            
+
             if (isChallengeMode && challengeButton != null)
             {
                 challengeButton.SetActive(false);
+            }
+
+            // Only show the Next Level button when the player wins
+            if (nextLevelButton != null)
+            {
+                nextLevelButton.SetActive(didWin);
             }
         }
     }
 
     public void RestartLevel()
     {
-        Time.timeScale = 1f; 
+        Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void LoadNextLevel()
+    {
+        Time.timeScale = 1f;
+        isChallengeMode = false;
+
+        int nextIndex = SceneManager.GetActiveScene().buildIndex + 1;
+
+        if (nextIndex < SceneManager.sceneCountInBuildSettings)
+        {
+            SceneManager.LoadScene(nextIndex);
+        }
+        else
+        {
+            Debug.LogWarning("No next level in Build Settings.");
+        }
     }
 
     public void LoadChallengeMode()
     {
-        isChallengeMode = true; 
+        isChallengeMode = true;
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void LoadMainMenu()
     {
-        isChallengeMode = false; 
-        Time.timeScale = 1f; 
-        SceneManager.LoadScene("MainMenu"); 
+        isChallengeMode = false;
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("MainMenu");
     }
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]

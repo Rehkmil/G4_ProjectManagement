@@ -356,7 +356,7 @@ AudioSource:
   m_GameObject: {fileID: 340743307}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -2344464355977883313, guid: 4dfc9517cc0613142aa58baca93771a0, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 1e4e493ff2ab41d4dae0f8a320a178d5, type: 3}
   m_PlayOnAwake: 1
@@ -840,7 +840,7 @@ GameObject:
   - component: {fileID: 1678494960}
   - component: {fileID: 1678494959}
   - component: {fileID: 1678494958}
-  - component: {fileID: 1678494957}
+  - component: {fileID: 1678494961}
   m_Layer: 5
   m_Name: Volume Button
   m_TagString: Untagged
@@ -867,21 +867,6 @@ RectTransform:
   m_AnchoredPosition: {x: 948, y: 337}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1678494957
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1678494955}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e40abc9c580cfac44a1f48deb8df791c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MainMenuVolumeButton
-  buttonIcon: {fileID: 1678494959}
-  volumeOnSprite: {fileID: 3097186548081448230, guid: 8b226721805d94447ad33164843fdb0f, type: 3}
-  volumeOffSprite: {fileID: -3058987190224480009, guid: c0136bba3f7fd8d4fbfbe275d84c344c, type: 3}
 --- !u!114 &1678494958
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -901,7 +886,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 2
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -926,7 +911,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1678494957}
+      - m_Target: {fileID: 1678494961}
         m_TargetAssemblyTypeName: MainMenuVolumeButton, Assembly-CSharp
         m_MethodName: ToggleVolume
         m_Mode: 1
@@ -976,6 +961,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1678494955}
   m_CullTransparentMesh: 1
+--- !u!114 &1678494961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1678494955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e40abc9c580cfac44a1f48deb8df791c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MainMenuVolumeButton
+  buttonIcon: {fileID: 1678494959}
+  volumeOnSprite: {fileID: 21300000, guid: 9229a10d7cdf40b44831ac6d3e687361, type: 3}
+  volumeOffSprite: {fileID: 21300000, guid: 281748174b18a934db09a95991b92e2b, type: 3}
 --- !u!1 &1883838217
 GameObject:
   m_ObjectHideFlags: 0
