@@ -1,34 +1,67 @@
+
 using UnityEngine;
 using System.Collections.Generic;
 
 public class PalletManager : MonoBehaviour
 {
+    public Animator ConveyorAnim;
+    public Transform Conveyor;
     public GameObject palletPrefab;
+
     public List<PalletBehavior> queueLine = new List<PalletBehavior>();
+
+    public float moveThreshold = 0.05f;
 
     void Update()
     {
-        if (!GameManager.instance.isGameActive) return;
+        if (!GameManager.instance.isGameActive)
+        {
+            ConveyorAnim.SetBool("IsMoving_R", false);
+            return;
+        }
 
-        //Remove the front pallet from the list the exact moment it finishes and drives away
+       
         if (queueLine.Count > 0 && queueLine[0].state == 2)
         {
             queueLine.RemoveAt(0);
         }
 
-        //Keep exactly 3 pallets spawned at all times
         if (queueLine.Count < 3)
         {
-            GameObject newPallet = Instantiate(palletPrefab, new Vector3(-12f, transform.position.y, 0), Quaternion.identity);
+            GameObject newPallet = Instantiate(
+                palletPrefab,
+                new Vector3(-12f, transform.position.y, 0),
+                Quaternion.identity
+            );
+
             queueLine.Add(newPallet.GetComponent<PalletBehavior>());
         }
 
-        //Tell every pallet in line where it is supposed to park
+        bool isMoving = false;
+
+        
         for (int i = 0; i < queueLine.Count; i++)
         {
-            if (i == 0) queueLine[i].targetX = -2f; //first row
-            if (i == 1) queueLine[i].targetX = -6f; //second row
-            if (i == 2) queueLine[i].targetX = -10f; //third/last row
+            if (queueLine[i] == null)
+                continue;
+
+           
+            
+            if (i == 2) queueLine[i].targetX = -10f;
+            if (i == 1) queueLine[i].targetX = -6f;
+            if (i == 0) queueLine[i].targetX = -2f;
+
+            
+            if (Mathf.Abs(
+                queueLine[i].transform.position.x -
+                queueLine[i].targetX
+            ) > moveThreshold)
+            {
+                isMoving = true;
+            }
         }
+
+       
+        ConveyorAnim.SetBool("IsMoving_R", isMoving);
     }
 }
