@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5529775614538160615}
   - component: {fileID: 8840109375110481361}
   - component: {fileID: 7403849491755960819}
+  - component: {fileID: 336008032088285450}
   m_Layer: 0
   m_Name: Audio Manager
   m_TagString: Untagged
@@ -143,9 +144,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AudioSettingsmanager
   audioMixer: {fileID: 24100000, guid: 4dfc9517cc0613142aa58baca93771a0, type: 2}
-  musicButtonImage: {fileID: 0}
-  musicOnSprite: {fileID: 21300000, guid: 9229a10d7cdf40b44831ac6d3e687361, type: 3}
-  musicOffSprite: {fileID: 21300000, guid: 281748174b18a934db09a95991b92e2b, type: 3}
-  sfxButtonImage: {fileID: 0}
-  sfxOnSprite: {fileID: 21300000, guid: 426ec9b4e73c07146a82e021b65385ef, type: 3}
-  sfxOffSprite: {fileID: 21300000, guid: d9160175822096741813e73b90d1c723, type: 3}
+--- !u!114 &336008032088285450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7332111763802844737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d705c4f433a33904894aff4d37c11c86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StopMusicOnMenu
+  menuSceneName: MainMenu

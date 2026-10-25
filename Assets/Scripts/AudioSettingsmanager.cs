@@ -1,33 +1,32 @@
-
+using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Audio;
-using UnityEngine.UI;
 
-public class AudioSettingsmanager : MonoBehaviour
+[DefaultExecutionOrder(-1)]
+public class AudioSettingsManager : MonoBehaviour
 {
-    public static AudioSettingsmanager Instance { get; private set; }
+    public static AudioSettingsManager Instance { get; private set; }
 
-    [Header("Audio Mixer")]
-    public AudioMixer audioMixer;
+    // This forces Unity to clear the static variable every time you enter Play Mode 
+    // when Domain Reload is disabled.
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ResetStatics()
+    {
+        Instance = null;
+    }
 
-    [Header("Music Button")]
-    public Image musicButtonImage;
-    public Sprite musicOnSprite;
-    public Sprite musicOffSprite;
-
-    [Header("SFX Button")]
-    public Image sfxButtonImage;
-    public Sprite sfxOnSprite;
-    public Sprite sfxOffSprite;
+    [SerializeField] private AudioMixer audioMixer;
 
     private const string MusicKey = "MusicEnabled";
     private const string SFXKey = "SFXEnabled";
+    private const string MusicParam = "MusicVolume";
+    private const string SFXParam = "SFXVolume";
 
-    private bool musicEnabled = true;
-    private bool sfxEnabled = true;
+    public bool MusicEnabled { get; private set; }
+    public bool SFXEnabled { get; private set; }
 
-    public bool MusicEnabled => musicEnabled;
-    public bool SFXEnabled => sfxEnabled;
+    public event Action Changed;
 
     private void Awake()
     {
@@ -40,80 +39,45 @@ public class AudioSettingsmanager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        musicEnabled = PlayerPrefs.GetInt(MusicKey, 1) == 1;
-        sfxEnabled = PlayerPrefs.GetInt(SFXKey, 1) == 1;
+        MusicEnabled = PlayerPrefs.GetInt(MusicKey, 1) == 1;
+        SFXEnabled = PlayerPrefs.GetInt(SFXKey, 1) == 1;
+    }
 
+    private IEnumerator Start()
+    {
+        yield return null; 
         ApplySettings();
     }
 
-    private void Start()
+    public void SetMusicEnabled(bool value)
     {
-        UpdateButtonImages();
-    }
-
-    public void ToggleMusic()
-    {
-        SetMusicEnabled(!musicEnabled);
-    }
-
-    public void ToggleSFX()
-    {
-        SetSFXEnabled(!sfxEnabled);
-    }
-
-    public void SetMusicEnabled(bool enabled)
-    {
-        musicEnabled = enabled;
-        PlayerPrefs.SetInt(MusicKey, enabled ? 1 : 0);
-
+        MusicEnabled = value;
+        PlayerPrefs.SetInt(MusicKey, value ? 1 : 0);
         ApplySettings();
-        UpdateButtonImages();
     }
 
-    public void SetSFXEnabled(bool enabled)
+    public void SetSFXEnabled(bool value)
     {
-        sfxEnabled = enabled;
-        PlayerPrefs.SetInt(SFXKey, enabled ? 1 : 0);
-
+        SFXEnabled = value;
+        PlayerPrefs.SetInt(SFXKey, value ? 1 : 0);
         ApplySettings();
-        UpdateButtonImages();
-    }
-
-    private void UpdateButtonImages()
-    {
-        if (musicButtonImage != null)
-        {
-            musicButtonImage.sprite = musicEnabled
-                ? musicOnSprite
-                : musicOffSprite;
-        }
-
-        if (sfxButtonImage != null)
-        {
-            sfxButtonImage.sprite = sfxEnabled
-                ? sfxOnSprite
-                : sfxOffSprite;
-        }
     }
 
     private void ApplySettings()
     {
+        // Trigger the UI to update immediately, even if the mixer is missing.
+        Changed?.Invoke();
+
         if (audioMixer == null)
+        {
+            Debug.LogWarning("AudioMixer is not assigned in the AudioSettingsManager! Audio won't change.");
             return;
+        }
 
-        audioMixer.SetFloat(
-            "MusicVolume",
-            musicEnabled ? 0f : -80f
-        );
-
-        audioMixer.SetFloat(
-            "SFXVolume",
-            sfxEnabled ? 0f : -80f
-        );
-    }
-
-    private void OnApplicationQuit()
-    {
-        PlayerPrefs.Save();
+        if (!audioMixer.SetFloat(MusicParam, MusicEnabled ? 0f : -80f))
+            Debug.LogWarning($"Exposed parameter '{MusicParam}' not found on mixer.");
+        
+        if (!audioMixer.SetFloat(SFXParam, SFXEnabled ? 0f : -80f))
+            Debug.LogWarning($"Exposed parameter '{SFXParam}' not found on mixer.");
     }
 }
